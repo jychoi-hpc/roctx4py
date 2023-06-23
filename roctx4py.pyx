@@ -4,6 +4,7 @@ from functools import wraps
 from contextlib import contextmanager
 
 cdef extern from "roctracer/roctx.h":
+    cdef void roctxMark (const char *)
     cdef void roctxRangePush (const char *)
     cdef void roctxRangePop (const char *)
 
@@ -20,6 +21,9 @@ cpdef str b2s(bytes x):
 
 cpdef bytes s2b(str x):
     return strdup(x.encode())
+
+cpdef mark(str name):
+    roctxMark(s2b(name))
 
 cpdef start(str name):
     roctxRangePush(s2b(name))
